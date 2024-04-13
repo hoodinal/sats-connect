@@ -1,95 +1,75 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+// pages/index.js
+import React, { useState, useEffect } from 'react';
+import { getProviders } from 'sats-connect';
 
 export default function Home() {
+  const [providers, setProviders] = useState([]);
+
+  const handleButtonClick = async () => {
+    const providersData = await getProviders();
+    console.log(providersData); // Console log pour le débogage
+    setProviders(providersData);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div style={styles.container}>
+      <div style={styles.buttonContainer}>
+        <button style={styles.button} type="button" onClick={handleButtonClick}>
+          Get Providers
+        </button>
+      </div>
+      {providers.length > 0 && (
+        <div style={styles.card}>
+          <pre>{JSON.stringify(providers, null, 2)}</pre>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      )}
+      <style jsx>{`
+        body {
+          background-color: #121212; // Mode sombre pour le body
+        }
+      `}</style>
+    </div>
   );
 }
+
+const styles = {
+  container: {
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: '20px',
+    backgroundColor: '#121212',
+  },
+  buttonContainer: {
+    marginTop: '20vh', // Espace au-dessus du bouton pour le centrer verticalement à l'initial
+    width: '100%', // Prend toute la largeur pour centrer le bouton
+    textAlign: 'center', // Centrage du bouton
+  },
+  button: {
+    padding: '15px 30px',
+    fontSize: '18px',
+    cursor: 'pointer',
+    border: '2px solid #0a58ca',
+    borderRadius: '8px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+    transition: 'all 0.3s',
+    outline: 'none',
+  },
+  card: {
+    marginTop: '10px', // Espace entre le bouton et la carte
+    padding: '10px',
+    borderRadius: '5px',
+    backgroundColor: '#333',
+    color: '#fff',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+    width: '60%', // Taille réduite pour la carte
+    textAlign: 'left',
+    overflow: 'auto', // Permet le défilement si le contenu est trop grand
+  }
+};
